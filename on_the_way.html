@@ -1,0 +1,78 @@
+<head>
+  <title>on_the_way</title>
+  <script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry?key=AIzaSyDSegZafnFPrSpnRXJrBJZiqRZfK_Rk8qA">
+  </script>
+</head>
+
+<body>
+  <div class="col-md-6">
+  {{> startLocation}}
+</div>
+  <div class="col-md-6">
+  {{> endLocation}}
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+  {{> priceFilter}}
+    </div>
+  </div>
+  <div class="row">
+    {{> submitButton}}
+  </div>
+</body>
+
+<!--
+  <h1 style="text-align: center">Welcome to On The Way!</h1>
+  <div class="filters" style="text-align: center">
+    <h2>Filters</h2>
+    <h3>Price</h3>
+-->
+
+<template name="startLocation">
+  <div class="form-group" style="text-align: center">
+    <h2>Start Location</h2>
+    <input type="start" class="form-control" id="start" placeholder="e.g. Istanbul">
+  </div>
+</template>
+
+<template name="endLocation">
+  <div class="form-group" style="text-align: center">
+    <h2>End Location</h2>
+    <input type="end" class="form-control" id="end" placeholder="e.g. Constantinople">
+  </div>
+</template>
+
+<template name="priceFilter">
+  <div class="priceFilter" style="text-align: center">
+    <h3>Price Filter</h3>
+    <div class="row">
+      <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-default">
+            <input type="radio" id="low" value="1" /> $
+        </label>
+        <label class="btn btn-default">
+            <input type="radio" id="med-low" value="2" /> $$
+        </label>
+        <label class="btn btn-default">
+            <input type="radio" id="med-high" value="3" /> $$$
+        </label>
+        <label class="btn btn-default">
+            <input type="radio" id="high" value="4" /> $$$$
+        </label>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="submitButton">
+  <div class="submitButton" style="text-align: center">
+    <div class="btn btn-default">
+      Submit
+    </div>
+  </div>
+</template>
+
+<template name="mapTemplate">
+  <div id="map-canvas"></div>
+</template>
