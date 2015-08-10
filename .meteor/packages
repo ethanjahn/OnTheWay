@@ -11,3 +11,6 @@ bootstrap
 mizzao:bootstrap-3
 dburles:google-maps
 http
+oauth1
+accounts-password
+accounts-base
