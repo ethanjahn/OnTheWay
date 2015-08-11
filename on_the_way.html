@@ -4,7 +4,7 @@
     src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry?key=AIzaSyDSegZafnFPrSpnRXJrBJZiqRZfK_Rk8qA">
   </script>
 </head>
-
+<!-- Just uses the templates to display -->
 <body>
   <div class="col-md-6">
   {{> startLocation}}
@@ -22,13 +22,7 @@
   </div>
 </body>
 
-<!--
-  <h1 style="text-align: center">Welcome to On The Way!</h1>
-  <div class="filters" style="text-align: center">
-    <h2>Filters</h2>
-    <h3>Price</h3>
--->
-
+<!-- start defining the templates -->
 <template name="startLocation">
   <div class="form-group" style="text-align: center">
     <h2>Start Location</h2>
@@ -43,6 +37,7 @@
   </div>
 </template>
 
+<!-- button group for the price filter -->
 <template name="priceFilter">
   <div class="priceFilter" style="text-align: center">
     <h3>Price Filter</h3>
@@ -73,6 +68,7 @@
   </div>
 </template>
 
+<!-- neccessary to display a map -->
 <template name="mapTemplate">
   <div id="map-canvas"></div>
 </template>
