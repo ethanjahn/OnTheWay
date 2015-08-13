@@ -1,0 +1,23 @@
+<head>
+  <title>on_the_way</title>
+  <script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry?key=AIzaSyDSegZafnFPrSpnRXJrBJZiqRZfK_Rk8qA">
+  </script>
+</head>
+<!-- Just uses the templates to display -->
+<body>
+  <div class="col-md-6">
+  {{> startLocation}}
+</div>
+  <div class="col-md-6">
+  {{> endLocation}}
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+  {{> priceFilter}}
+    </div>
+  </div>
+  <div class="row">
+    {{> submitButton}}
+  </div>
+</body>
