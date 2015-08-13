@@ -12,7 +12,7 @@ Template.body.rendered = function() {
       travelMode: google.maps.TravelMode.DRIVING
     };
     directionsService.route(request, function(result, status) {
-      if (status == google.maps.DirectionsStatus.OK) {
+      if (status === google.maps.DirectionsStatus.OK) {
         //directionsDisplay.setDirections(result);
         path = result.routes[0].overview_path;
         pathCallback(path);
