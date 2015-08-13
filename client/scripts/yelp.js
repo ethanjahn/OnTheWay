@@ -1,5 +1,5 @@
 // yelp stuff, not working yet
-yelp = new Object();
+yelp = {};
 yelp.Results = function returnFromYelp(lat,lng,resultCallback) {
   var apiKey = 1234;
   var term = 'food';

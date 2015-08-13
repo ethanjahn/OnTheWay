@@ -1,6 +1,6 @@
 // loads the maps api stuff when the html loads (so the api isn't called before it is loaded)
 Template.body.rendered = function() {
-  Results = new Object();
+  Results = {};
   Results.path = function calcRoute(pathCallback) {
     var directionsService = new google.maps.DirectionsService();
     var path = [];
