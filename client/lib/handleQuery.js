@@ -64,11 +64,9 @@ Template.body.events({
         var dist = distFromCoords(lat1,lng1,lat2,lng2);
         if(distTotal > distThresh) {
           distTotal = 0;
-          console.log('if');
           yelp.Results(lat2,lng2, yelpCallback);
         // Otherwise, continue the loop
         } else {
-          console.log('else');
           distTotal += dist;
         }
       }

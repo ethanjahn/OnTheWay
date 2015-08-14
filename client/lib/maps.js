@@ -16,7 +16,7 @@ Template.body.rendered = function() {
         //directionsDisplay.setDirections(result);
         path = result.routes[0].overview_path;
         pathCallback(path);
-        }
-      });
+      }
+    });
   };
 };
