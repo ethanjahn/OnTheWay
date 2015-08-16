@@ -1,7 +1,7 @@
-var Query = {}; // switch to collection, maybe do the calculations serverside
-Query.priceFilter = '';
-
 if (Meteor.isClient) {
+  Session.set('notSubmitted',true)
+  console.log(Session.get('notSubmitted'))
+  var Query = {};
 // returns what the user sets on the price button
   Template.priceFilter.events({
     'click .btn' : function(e, template) {
@@ -10,7 +10,10 @@ if (Meteor.isClient) {
       Query.priceFilter = priceSelection;
       }
     });
-
+    result = {
+      name: 'Thing1',
+      price: 20,
+    }
 // what happens when someone clicks submit
   Template.body.events({
     'click .submitButton' : function(e, template) {
@@ -20,31 +23,11 @@ if (Meteor.isClient) {
       if(Query.endLocation != '' && Query.startLocation != '') {
         if(Query.priceFilter != '') { //all three inputs have actual input
           Query.status = 'OK';
-          Results.path(function(path) { // callback of the path of the directionsService
-            var distTotal = 0;
-            var tripDist = google.maps.geometry.spherical.computeLength(path);
-            var distThresh = tripDist / 10;
-            for(var i = 0; i < (path.length - 1); i++) { // iterate through the points to find the distance between them
-              var coord1 = path[i];
-              var lat1 = coord1.lat();
-              var lng1 = coord1.lng();
-              var coord2 = path[i+1];
-              var lat2 = coord2.lat();
-              var lng2 = coord2.lng();
-              var dist = distFromCoords(lat1,lng1,lat2,lng2);
-              if(distTotal > distThresh) { // log points when the total distance is greater than the threshold
-                distTotal = 0;
-                console.log('if');
-                yelp.Results(lat2,lng2,function(result){
-                  console.log(result)
-                });
-              } else {
-                console.log('else')
-                distTotal += dist;
-              }
-            }
-          });
-        } else {
+          Session.set('submitted',true)
+          Session.set('notSubmitted',false)
+          //Meteor.call('getCoords',Query.startLocation,Query.endLocation,Query.priceFilter,function(){
+          //})
+            } else {
           console.log('Please Choose a filter')
         }
       } else {
@@ -52,22 +35,10 @@ if (Meteor.isClient) {
       }
     }
   });
-// convert to radians
-  Number.prototype.toRadians = function() {
-    return this * Math.PI / 180;
-    }
 
-// return ditance between lat,lng
-  function distFromCoords(lat1,lon1,lat2,lon2) {
-      var phi1 = lat1.toRadians()
-      var phi2 = lat2.toRadians()
-      var lambda = (lon2-lon1).toRadians()
-      var R = 6371000; // gives d in metres
-      var d = Math.acos( Math.sin(phi1)*Math.sin(phi2) + Math.cos(phi1)*Math.cos(phi2) * Math.cos(lambda) ) * R;
-      return(d)
-    }
 
 // yelp stuff, not working yet
+/*
     yelp = new Object;
   yelp.Results = function returnFromYelp(lat,lng,resultCallback) {
     var apiKey = 1234;
@@ -87,28 +58,74 @@ if (Meteor.isClient) {
       }
     });
   }
-
+*/
 
 // loads the maps api stuff when the html loads (so the api isn't called before it is loaded)
-  Template.body.rendered = function() {
-    Results = new Object();
-    Results.path = function calcRoute(pathCallback) {
-      var directionsService = new google.maps.DirectionsService();
-      var path = []
-      var start = Query.startLocation;
-      var end = Query.endLocation;
-      var request = {
-        origin:start,
-        destination:end,
-        travelMode: google.maps.TravelMode.DRIVING
-      };
-      directionsService.route(request, function(result, status) {
-        if (status == google.maps.DirectionsStatus.OK) {
-          //directionsDisplay.setDirections(result);
-          path = result.routes[0].overview_path;
-          pathCallback(path)
+
+}
+
+if (Meteor.isServer) {
+/*
+  Router.map( function () {
+  this.route('mapTemplate',{
+    waitOn: IRLibLoader.load('https://maps.googleapis.com/maps/api/js?libraries=places,geometry?key=AIzaSyDSegZafnFPrSpnRXJrBJZiqRZfK_Rk8qA')
+  });
+}, {where: 'server'});
+*/
+  var Query = {};
+  Query.priceFilter = '';
+  Meteor.startup(function() {
+    Meteor.methods({
+    getCoords: function(startLocation,endLocation,priceFilter) {
+        console.log(startLocation)
+        var directionsService = new google.maps.DirectionsService();
+        var path = []
+        var request = {
+          origin:startLocation,
+          destination:endLocation,
+          travelMode: google.maps.TravelMode.DRIVING
+        };
+        directionsService.route(request, function(result, status) {
+          if (status == google.maps.DirectionsStatus.OK) {
+            //directionsDisplay.setDirections(result);
+            path = result.routes[0].overview_path;
+            Meteor.call('samplePath',path);
           }
         });
+    },
+    samplePath: function(path) {
+      var distTotal = 0;
+      var tripDist = google.maps.geometry.spherical.computeLength(path);
+      var distThresh = tripDist / 10;
+      for(var i = 0; i < (path.length - 1); i++) { // iterate through the points to find the distance between them
+        var coord1 = path[i];
+        var lat1 = coord1.lat();
+        var lng1 = coord1.lng();
+        var coord2 = path[i+1];
+        var lat2 = coord2.lat();
+        var lng2 = coord2.lng();
+        var dist = distFromCoords(lat1,lng1,lat2,lng2);
+        if(distTotal > distThresh) { // log points when the total distance is greater than the threshold
+          distTotal = 0;
+          console.log('if');
+        } else {
+          console.log('else')
+          distTotal += dist;
+        }
+      }
+    },
+    distFromCoords: function distFromCoords(lat1,lng1,lat2,lng2) {
+        var phi1 = lat1.toRadians()
+        var phi2 = lat2.toRadians()
+        var lambda = (lng2-lng1).toRadians()
+        var R = 6371000; // gives d in metres
+        var d = Math.acos( Math.sin(phi1)*Math.sin(phi2) + Math.cos(phi1)*Math.cos(phi2) * Math.cos(lambda) ) * R;
+        return(d)
     }
-}
+    })
+  })
+  // convert to radians
+    Number.prototype.toRadians = function() {
+      return this * Math.PI / 180;
+      }
 }

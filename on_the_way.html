@@ -1,14 +1,18 @@
 <head>
   <title>on_the_way</title>
-  <script type="text/javascript"
-    src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry?key=AIzaSyDSegZafnFPrSpnRXJrBJZiqRZfK_Rk8qA">
-  </script>
 </head>
 <!-- Just uses the templates to display -->
 <body>
   <div class="col-md-6">
-  {{> startLocation}}
-</div>
+    {{#if notSubmitted}}
+      {{> startLocation}}
+    {{/if}}
+  </div>
+  <div>
+    {{#if submitted}}
+      {{> loadScreen}}
+    {{/if}}
+  </div>
   <div class="col-md-6">
   {{> endLocation}}
   </div>
@@ -19,6 +23,14 @@
   </div>
   <div class="row">
     {{> submitButton}}
+  </div>
+  <div class="map">
+    {{> mapTemplate}}
+  </div>
+  <div>
+    {{#each result}}
+      {{> Result}}
+    {{/each}}
   </div>
 </body>
 
@@ -70,5 +82,22 @@
 
 <!-- neccessary to display a map -->
 <template name="mapTemplate">
+  <script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry?key=AIzaSyDSegZafnFPrSpnRXJrBJZiqRZfK_Rk8qA">
+  </script>
   <div id="map-canvas"></div>
+</template>
+
+<template name="loadScreen">
+  <h1>Your Shit is Loading, Son</h1>
+</template>
+
+<template name='Result'>
+  <h1>Result Placeholder</h1>
+  <div>
+    {{result.name}}
+  </div>
+  <div>
+    {{result.price}}
+  </div>
 </template>
