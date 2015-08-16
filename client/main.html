@@ -4,20 +4,13 @@
     src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry?key=AIzaSyDSegZafnFPrSpnRXJrBJZiqRZfK_Rk8qA">
   </script>
 </head>
-<!-- Just uses the templates to display -->
+
 <body>
-  <div class="col-md-6">
-  {{> startLocation}}
-</div>
-  <div class="col-md-6">
-  {{> endLocation}}
+  <div>
+    {{> UIstate}}
   </div>
-  <div class="row">
-    <div class="col-md-6 col-md-offset-3">
-  {{> priceFilter}}
-    </div>
-  </div>
-  <div class="row">
-    {{> submitButton}}
+  <!-- Hopefully I will put this in a template, but prototyping was easier with it separate -->
+  <div id="map-canvas">
+    <h1>Map Should Be Here</h1>
   </div>
 </body>

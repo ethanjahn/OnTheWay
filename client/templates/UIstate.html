@@ -1,0 +1,14 @@
+<template name="UIstate">
+  <!-- initial UI with the user input boxes -->
+  {{#if checkState 'initial'}}
+    {{> initialState}}
+  {{/if}}
+  <!-- UI once the user has put in a valid input -->
+  {{#if checkState 'loading'}}
+    {{> loadScreen}}
+  {{/if}}
+  <!-- UI once the Yelp results have been loaded -->
+  {{#if checkState 'resultsLoaded'}}
+    {{> yelpResultsPage}}
+  {{/if}}
+</template>

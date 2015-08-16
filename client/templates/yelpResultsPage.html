@@ -1,0 +1,14 @@
+<template name="yelpResultsPage">
+  {{#each result}}
+    <h1>{{name}}</h1>
+    <ul>
+      <li>SimpleID: {{simpleID}}</li>
+      <li>Rating: {{rating}}</li>
+      <li>Review Count: {{review_count}}</li>
+    </ul>
+  {{/each}}
+
+  <div>
+    {{> mapTemplate}}
+  </div>
+</template>

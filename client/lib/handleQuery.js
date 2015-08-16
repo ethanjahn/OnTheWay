@@ -1,6 +1,10 @@
 Query = {};
 Query.priceFilter = '';
 
+// set the UI to the initial state
+Session.set('state', 'initial')
+
+
 /*
  * Updates the Query global object's priceFilter field to be the clicked
  * dollar-amount filter
@@ -12,13 +16,6 @@ Template.priceFilter.events({
     Query.priceFilter = priceSelection;
   }
 });
-
-/*
- * Function to be executed upon successful return from Yelp
- */
-function yelpCallback (result) {
-  console.log(result);
-}
 
 /*
  * When user hits submit, make sure all the fields have been set, determine
@@ -42,34 +39,10 @@ Template.body.events({
       return;
     }
 
-    Query.valid = true;
+    //update the UI to reflect the valid input, and display a load screen
+    Session.set('state', 'loading')
+
     // Callback of the path of the directionsService
-    Results.path(function (path) {
-      var distTotal = 0;
-      var tripDist = google.maps.geometry.spherical.computeLength(path);
-      var distThresh = tripDist / 10;
-      // Iterate through the points to find the distance between them
-      for(var i = 0; i < (path.length - 1); i++) {
-        // Get i-th point
-        var coord1 = path[i];
-        var lat1 = coord1.lat();
-        var lng1 = coord1.lng();
-
-        // Get i+1-th point
-        var coord2 = path[i+1];
-        var lat2 = coord2.lat();
-        var lng2 = coord2.lng();
-
-        // If distance between points is larger than the threshold, then log
-        var dist = distFromCoords(lat1,lng1,lat2,lng2);
-        if(distTotal > distThresh) {
-          distTotal = 0;
-          yelp.Results(lat2,lng2, yelpCallback);
-        // Otherwise, continue the loop
-        } else {
-          distTotal += dist;
-        }
-      }
-    });
+    Results.path(sampleCoords);
   }
 });
