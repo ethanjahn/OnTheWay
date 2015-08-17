@@ -10,9 +10,9 @@ var oauth_config = {
 };
 
 yelp = {};
-yelp.Results = function returnFromYelp(lat,lng,resultCallback) {
+yelp.Results = function returnFromYelp(lat, lng, resultCallback) {
   Meteor.call('configureYelp', oauth_config);
-  Meteor.call('searchYelp', 'food', true, lat, lng, function (err, result) {
+  Meteor.call('searchYelp', 'food', true, lat, lng, function(err, result) {
     if (err) {
       alert(err);
     } else {
@@ -24,12 +24,13 @@ yelp.Results = function returnFromYelp(lat,lng,resultCallback) {
 /*
  * Function to be executed upon successful return from Yelp
  */
- // Used to give both an ID in the database and a label for the map
+// Used to give both an ID in the database and a label for the map
 var simpleIDindex = -1;
-var markerLabels = 'abcdefghijklmnopqrstuvwxyz123456789'
+var markerLabels = 'abcdefghijklmnopqrstuvwxyz123456789';
+
 yelpCallback = function yelpCallback(result) {
   // iterate through the returned businesses for a given result
-  for(index in result.businesses){
+  for (var index in result.businesses) {
     var businessObject = {
       // generate a database entry for each business
       name: result.businesses[index].name,
@@ -39,13 +40,18 @@ yelpCallback = function yelpCallback(result) {
       longitude: result.businesses[index].location.coordinate.longitude,
     };
     // try to find the business in the DB, if it is not there, add it
-    var tryToFind = YelpResults.findOne({name: businessObject.name});
-    if(typeof tryToFind === 'undefined'){
+    var tryToFind = YelpResults.findOne({
+      name: businessObject.name
+    });
+    if (typeof tryToFind === 'undefined') {
       simpleIDindex += 1;
       businessObject.simpleID = markerLabels[simpleIDindex];
+      // insert result into local DB
       YelpResults.insert(businessObject);
       // addMarker to the google map
-      addMarker(businessObject.latitude,businessObject.longitude,businessObject.simpleID.toString());
+      addMarker(businessObject.latitude, businessObject.longitude, businessObject.simpleID.toString());
+      //Record that a result has been loaded, the rest of the results should add to the list reactively
+      Session.set('state', 'resultsLoaded');
     }
-  };
-}
+  }
+};

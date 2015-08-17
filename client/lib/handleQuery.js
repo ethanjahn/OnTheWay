@@ -2,7 +2,7 @@ Query = {};
 Query.priceFilter = '';
 
 // set the UI to the initial state
-Session.set('state', 'initial')
+Session.set('state', 'initial');
 
 
 /*
@@ -10,7 +10,7 @@ Session.set('state', 'initial')
  * dollar-amount filter
  */
 Template.priceFilter.events({
-  'click .btn' : function(e, template) {
+  'click .btn': function(e, template) {
     e.preventDefault();
     var priceSelection = e.target.innerText;
     Query.priceFilter = priceSelection;
@@ -22,7 +22,7 @@ Template.priceFilter.events({
  * points to query Yelp for, and then make the queries and log results.
  */
 Template.body.events({
-  'click .submitButton' : function(e, template) {
+  'click .submitButton': function(e, template) {
     e.preventDefault();
 
     // Get start and end locations from input text boxes
@@ -33,14 +33,14 @@ Template.body.events({
     if (Query.endLocation === '' && Query.startLocation === '') {
       console.log('Please choose a filter');
       return;
-    // Ensure the price filter is set
+      // Ensure the price filter is set
     } else if (Query.priceFilter === '') {
       console.log('Please input locations');
       return;
     }
 
-    //update the UI to reflect the valid input, and display a load screen
-    Session.set('state', 'loading')
+    // Update the UI to reflect the valid input, and display a load screen
+    Session.set('state', 'loading');
 
     // Callback of the path of the directionsService
     Results.path(sampleCoords);

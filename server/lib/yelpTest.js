@@ -12,7 +12,7 @@ var getYelpOauthBinding = function(url) {
     return oauthBinding;
   } else {
     throw new Meteor.Error(500, 'Yelp Not Configured');
-  }  
+  }
 };
 
 Meteor.methods({
@@ -31,14 +31,14 @@ Meteor.methods({
   },
   searchYelp: function(search, isCategory, latitude, longitude) {
     this.unblock();
-    
+
     console.log('Yelp search for userId: ' + this.userId + '(search, isCategory, lat, lon) with vals (', search, isCategory, latitude, longitude, ')');
-    
+
     // Add REST resource to base URL
     var url = yelp_base_url + 'search';
 
     var oauthBinding = getYelpOauthBinding(url);
-    
+
     // Build up query
     var parameters = {};
     // Search term or categories query
